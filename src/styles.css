@@ -1,0 +1,215 @@
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --border: #e3e6ea;
+  --text: #1f2328;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-soft: #eff4ff;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+  --danger-border: #fecaca;
+  --warn: #b45309;
+  --warn-soft: #fffbeb;
+  --ok: #15803d;
+  --ok-soft: #f0fdf4;
+  --radius: 10px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+code, pre { font-family: var(--mono); }
+
+/* ---------- 布局 ---------- */
+.page { max-width: 1080px; margin: 0 auto; padding: 24px 20px 80px; }
+
+.masthead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+.masthead h1 { font-size: 22px; margin: 0; letter-spacing: -0.02em; }
+.masthead .sub { color: var(--muted); font-size: 13px; }
+
+.steps { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 22px; }
+.step-chip {
+  display: flex; align-items: center; gap: 7px;
+  padding: 6px 12px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--muted); font-size: 13px;
+}
+.step-chip.done { border-color: #bbf7d0; background: var(--ok-soft); color: var(--ok); }
+.step-chip.active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.card > h2 {
+  font-size: 15px; font-weight: 650; margin: 0 0 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card > .hint { color: var(--muted); font-size: 12.5px; margin: 0 0 16px; }
+
+/* ---------- 表单 ---------- */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+textarea, input[type="text"] {
+  width: 100%; padding: 10px 12px;
+  border: 1px solid var(--border); border-radius: 8px;
+  font-family: inherit; font-size: 13.5px; color: var(--text);
+  background: #fff; resize: vertical;
+}
+textarea:focus, input[type="text"]:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.dropzone {
+  /* 关键：label 默认是 inline，inline 元素上的 padding/border 不会撑开盒子，
+     会把边框画到行高里面去，看起来就是"框错位"。必须显式改成 block。 */
+  display: block;
+  width: 100%;
+  border: 1.5px dashed var(--border); border-radius: var(--radius);
+  padding: 22px; text-align: center; color: var(--muted);
+  background: #fafbfc; cursor: pointer; transition: 0.15s;
+}
+.dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.dropzone .file { color: var(--text); font-weight: 600; }
+
+.actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+
+button {
+  font-family: inherit; font-size: 13.5px; font-weight: 600;
+  padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  border: 1px solid transparent; transition: 0.15s;
+}
+button.primary { background: var(--accent); color: #fff; }
+button.primary:hover:not(:disabled) { background: #1d4ed8; }
+button.ghost { background: #fff; border-color: var(--border); color: var(--text); }
+button.ghost:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/*
+ * 分段控件（模式切换）。
+ * 为什么单独做一套而不是复用 .primary/.ghost：
+ * .primary 和 .ghost 是同特异性的两个类，同时挂在元素上时就变成了"谁写在 CSS 后面谁生效"，
+ * 结果就是选中态永远显示不出来 —— 按钮看起来点了没反应。这里用 .seg.active
+ * （两个类，特异性更高）来保证激活态一定压过基础态，与书写顺序无关。
+ */
+.segmented {
+  display: inline-flex; border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; background: #fff;
+}
+.seg {
+  border: 0; border-radius: 0; background: transparent;
+  color: var(--muted); padding: 8px 16px; font-weight: 600; font-size: 13px;
+}
+.seg + .seg { border-left: 1px solid var(--border); }
+.seg.active { background: var(--accent); color: #fff; }
+.seg.active:hover { background: #1d4ed8; }
+
+/* 补齐缺失字段的小表单：两列，窄屏自动堆叠 */
+.patch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 12px; }
+
+/* ---------- 结果展示 ---------- */
+.kv { display: grid; grid-template-columns: 96px 1fr; gap: 6px 12px; font-size: 13.5px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  padding: 3px 9px; border-radius: 6px; font-size: 12.5px;
+  background: var(--accent-soft); color: var(--accent); border: 1px solid #dbeafe;
+}
+.tag.miss { background: var(--danger-soft); color: var(--danger); border-color: var(--danger-border); }
+.tag.ok { background: var(--ok-soft); color: var(--ok); border-color: #bbf7d0; }
+
+.score {
+  display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px;
+}
+.score .num { font-size: 40px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.score .of { color: var(--muted); font-size: 13px; }
+
+.bullets { margin: 0; padding-left: 18px; }
+.bullets li { margin: 3px 0; }
+
+/* ---------- 错误展示（本次核心）---------- */
+.error-banner {
+  border: 1px solid var(--danger-border);
+  background: var(--danger-soft);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.error-banner .head {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; color: var(--danger); margin-bottom: 6px;
+}
+.error-banner .head .status {
+  font-family: var(--mono); font-size: 12px;
+  background: var(--danger); color: #fff;
+  padding: 1px 7px; border-radius: 5px;
+}
+.error-banner .where {
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+  margin-bottom: 8px; word-break: break-all;
+}
+.error-banner .msg { color: #7f1d1d; white-space: pre-wrap; word-break: break-word; }
+.error-banner .fix { margin-top: 8px; font-size: 12.5px; color: var(--warn); background: var(--warn-soft); border-radius: 6px; padding: 8px 10px; }
+.error-banner .tools { margin-top: 10px; }
+
+.inline-error {
+  margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+  background: var(--danger-soft); border: 1px solid var(--danger-border);
+  color: #7f1d1d; font-size: 13px; white-space: pre-wrap;
+}
+
+.notice {
+  padding: 10px 12px; border-radius: 8px; font-size: 13px;
+  background: var(--warn-soft); border: 1px solid #fde68a; color: var(--warn);
+}
+
+/* ---------- 原始数据 ---------- */
+details.raw { margin-top: 14px; }
+details.raw summary {
+  cursor: pointer; color: var(--muted); font-size: 12.5px;
+  user-select: none; padding: 2px 0;
+}
+details.raw summary:hover { color: var(--accent); }
+details.raw pre {
+  margin: 8px 0 0; padding: 12px; border-radius: 8px;
+  background: #0f172a; color: #cbd5e1;
+  font-size: 12px; line-height: 1.6;
+  max-height: 320px; overflow: auto; white-space: pre-wrap; word-break: break-word;
+}
+
+/* ---------- 对话 ---------- */
+.chat { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; max-height: 460px; overflow-y: auto; }
+.bubble { display: flex; gap: 10px; }
+.bubble .who { flex: 0 0 52px; font-size: 12px; color: var(--muted); padding-top: 3px; }
+.bubble .body { flex: 1; white-space: pre-wrap; word-break: break-word; }
+.bubble.user .body { background: var(--accent-soft); border: 1px solid #dbeafe; border-radius: 8px; padding: 8px 12px; }
+.bubble.assistant .body { background: #fafbfc; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; }
+.bubble.pending .body { color: var(--muted); }
+
+.spin {
+  display: inline-block; width: 12px; height: 12px;
+  border: 2px solid var(--border); border-top-color: var(--accent);
+  border-radius: 50%; animation: spin 0.7s linear infinite;
+  vertical-align: -1px; margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.muted { color: var(--muted); font-size: 12.5px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
