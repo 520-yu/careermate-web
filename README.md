@@ -2,7 +2,7 @@
 
 > CareerMate 的前端：简历上传 → JD 匹配 → 流式模拟面试 → 评估报告。
 
-后端仓库见同级目录 `careermate`。
+后端仓库：[careermate](https://github.com/520-yu/careermate)（Spring Boot + Spring AI）
 
 ---
 
